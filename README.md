@@ -2,9 +2,9 @@
 
 ### Important note!
 
-_Currently this implentation is NOT Python 3.13 (or later) compatible.  The newly defaulted SSL behavior requiring STRICT_X509_CHECK (or something like that) breaks the Kubernetes client and Vault over SSL functionality. I'll edit this note once I have a suitable hack to mitigate this 'enhancement',
+_Currently this implentation is NOT Python 3.13 (or later) compatible.  The newly defaulted SSL behavior requiring_ `VERIFY_X509_STRICT` _breaks the Kubernetes client and Vault over SSL functionality. I'll edit this note once I have a suitable hack to mitigate this 'enhancement',_
 
-```
+```python
     import ssl
     import requests
 
@@ -13,7 +13,7 @@ _Currently this implentation is NOT Python 3.13 (or later) compatible.  The newl
     requests.get("https://example.com", verify=False, ssl_context=context)
 ```
 
-and remove it once I've captured the recipe for key SSL cert creation that  eliminates the problem.[^1]_
+_and remove it once I've captured the recipe for key SSL cert creation that  eliminates the problem. [**1**](https://github.com/canonical/microk8s/issues/4864)_
 
 ## Why a SecretManager?
 
@@ -43,4 +43,3 @@ Beyond the library and the Vault, there are three Python components that compris
 
 - recryptonator.py which implements the key rotation which is central to this new, more secure implementation. The recryptonator _periodically_ reads the ciphertext from the Kubernetes secret, decrypts it, rotates the transit key, reencrypts the secrets with the new key, and stores the new ciphertext back in the Kubernetes secret. The periodicity is achieved by running a CronJob in the Kubernetes cluster - in the example - every day at 3:00AM. It can certainly be run more frequently as the whole process takes no more tham 150ms (with substantial logging).
 
-[^1]: https://github.com/canonical/microk8s/issues/4864
