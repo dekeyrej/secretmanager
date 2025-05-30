@@ -10,14 +10,14 @@ spec:
         spec:
           containers:
           - name: recryptonator
-            image: recryptonator-image:latest  # Replace with your container image
-            imagePullPolicy: IfNotPresent
-            command: ["python", "/app/recryptonator.py"]  # Adjust based on your script location
+            image: ghcr.io/dekeyrej/recryptonator-image:latest  # Replace with your container image
+            imagePullPolicy: Always
+            # command: ["python", "/app/recryptonator.py"]  # Adjust based on your script location
             env:
             - name: VAULT_URL
               value: "https://192.168.86.60:8200"
             - name: CA_CERT
-              value: "/etc/certs/ca.crt"
+              value: "/code/ca.crt"
             - name: ROLE
               value: "demo"
             - name: SERVICE_ACCOUNT
@@ -33,3 +33,5 @@ spec:
             - name: VALIDATE
               value: "1"
           restartPolicy: OnFailure
+          imagePullSecrets:
+          - name: ghcr-login-secret

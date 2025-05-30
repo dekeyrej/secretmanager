@@ -12,8 +12,10 @@ class SecretManager:
         self.namespace = k8s_namespace
         self.role = role
         if os.getenv("PROD") == "1":
-            config.load_incluster_config()  # Running inside the cluster
+            logging.info("Running in production mode.")
+            config.incluster_config.load_incluster_config()  # Running inside the cluster
         else:
+            logging.info("Running in development mode.")
             config.load_kube_config()  # Running locally
         self.k8s_client = client.CoreV1Api()
         self.hvac_client = hvac.Client(url=vault_url, verify=ca_path)

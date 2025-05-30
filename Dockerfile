@@ -13,5 +13,6 @@ ENV PATH="/opt/venv/bin:$PATH" \
     PYTHONUNBUFFERED=1
 WORKDIR /code
 COPY recryptonator.py .
+COPY secretmanager.py .
 COPY ca.crt .
-CMD ["sh", "-c", "python /code/recryptinator.py"]
+CMD ["sh", "-c", "python /code/recryptonator.py"]
