@@ -12,18 +12,21 @@ class SecretManager:
         self.namespace = k8s_namespace
         self.role = role
         if os.getenv("PROD") == "1":
-            logging.info("Running in production mode.")
-            config.incluster_config.load_incluster_config()  # Running inside the cluster
+            logging.info("SecretManager - Running in production mode.")
+            config.load_incluster_config()  # Running inside the cluster
         else:
-            logging.info("Running in development mode.")
+            logging.info("SecretManager - Running in development mode.")
             config.load_kube_config()  # Running locally
+        logging.info("SecretManager - Getting a k8s client.")
         self.k8s_client = client.CoreV1Api()
+        logging.info("SecretManager - Getting a Vault client.")
         self.hvac_client = hvac.Client(url=vault_url, verify=ca_path)
+        logging.info("SecretManager - Authenticating with Vault using Kubernetes service account token.")
         self.hvac_client.token = self.authenticate_vault_with_kubernetes(role, self.get_service_account_token(service_account))
         if self.hvac_client.is_authenticated():
-            logging.info("Vault authentication successful.")
+            logging.info("SecretManager - Vault authentication successful.")
         else:
-            logging.error("Vault authentication failed. Please check your credentials and configuration.")
+            logging.error("SecretManager - Vault authentication failed. Please check your credentials and configuration.")
             raise Exception("Vault authentication failed.")
     
     def get_service_account_token(self, service_account):

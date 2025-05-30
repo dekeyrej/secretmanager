@@ -1,6 +1,5 @@
 import argparse
 import hashlib
-# import json
 import logging
 from secretmanager import SecretManager
 

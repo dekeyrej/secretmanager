@@ -12,7 +12,8 @@ spec:
           - name: recryptonator
             image: ghcr.io/dekeyrej/recryptonator-image:latest  # Replace with your container image
             imagePullPolicy: Always
-            # command: ["python", "/app/recryptonator.py"]  # Adjust based on your script location
+            securityContext:
+              privileged: false
             env:
             - name: VAULT_URL
               value: "https://192.168.86.60:8200"

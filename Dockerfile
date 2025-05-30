@@ -1,12 +1,12 @@
 #Builder stage
-FROM python:slim AS builder
+FROM python:3.12-slim AS builder
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 COPY requirements.txt .
 RUN . /opt/venv/bin/activate
 RUN pip install -r requirements.txt
 #Operational stage
-FROM python:slim
+FROM python:3.12-slim
 COPY --from=builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH" \
     PROD=1 \
