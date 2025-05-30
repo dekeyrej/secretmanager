@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-export repository=ghcr.io/dekeyrej
+export repository=ghcr.io/dekeyrej/secretmanager
 export tag=latest
 export BUILDX_BUILDER=container
 
