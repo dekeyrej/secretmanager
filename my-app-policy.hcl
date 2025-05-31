@@ -1,12 +1,6 @@
 path "auth/kubernetes/login" {
     capabilities = ["create", "read"]
 }
-path "secret/data/*" {
-    capabilities = ["create", "read", "update", "delete", "list"]
-}
-path "secret/metadata/*" {
-    capabilities = ["read", "list", "delete"]
-}
 path "transit/encrypt/aes256-key" {
   capabilities = ["update"]
 }

@@ -21,9 +21,9 @@ I've been considering the "where does the first secret live?" question for a whi
 
 ## History (well _my_ history with this question)
 
-- Store all of the secrets in a JSON 'dict', and copy that into each of my images.  Works, but wildly insecure.
+- Store all of the secrets in a JSON 'dict', and copy that into each of my images.  Works, but wildly insecure - but also very handy for development without access to the Kubernetes cluster.
 
-- Create a library to manage (encrypt/decrypt) 'SecureDicts' -- JSON 'dict' with plaintext keys, and AES256 encrypted values. dict is now _reasonably_ secure, but I was left with trying to provide the AES256 key to the running container. At this point I implemented code to (1) store the AES256 key as a Kubernetes secret, (2) access that secret directly from the secret (no mounting, no environment variables), and (3) decrypt the secret values. Works, more secure, and a bit easier to understand from a code development standpoint - but the AES256 key is still 'exposed'.
+- Create a library to manage (encrypt/decrypt) 'SecureDicts' -- JSON 'dict' with plaintext keys, and AES256 encrypted values. dict is now _reasonably_ secure, but I was left with trying to provide the AES256 key to the running container. At this point I implemented code to (1) store the AES256 key as a Kubernetes secret, (2) access that secret directly from the secret (no mounting, no environment variables), and (3) decrypt the secret values. Works, more secure, and a bit easier to understand from a code development standpoint - but the AES256 key is still 'exposed'. (perhaps the basis for a future method - reading the AES256 key from the Vault?)
 
 - Cram the whole JSON dict into one secret, read that secret and "Bob's your uncle...". My base class for my microservices reads the secret on initialization, extracts the values it requires, and then destroys the objects that accessed the secret. Works, performant, obscured, but not really secure - though there are no traces of the secret visible in the images, or container other than the couple of values required for the particular microservice.
 
@@ -37,9 +37,9 @@ This current scheme integrates Kubernetes secrets to store the ciphertext (AES25
 
 Beyond the library and the Vault, there are three Python components that comprise the solution:
 
-- encryptonator.py is run once* to read the plaintext file (text-based, but no formatting assumed), encrypt that file with the transit key, and load the ciphertext into the target Kubernetes secret. (once* at startup, and anytime the base plaintext is changed)
+- **encryptonator.py** is run once* to read the plaintext file (text-based, but no formatting assumed), encrypt that file with the transit key, and load the ciphertext into the target Kubernetes secret. (once* at startup, and anytime the base plaintext is changed)
 
-- readstub.py which is a surrogate implementation for reading the ciphertext from the Kubernetes secret, and decrypting the secret resulting in a usable set of values.
+- **readstub.py** which is a surrogate implementation for reading the ciphertext from the Kubernetes secret, and decrypting the secret resulting in a usable set of values.
 
-- recryptonator.py which implements the key rotation which is central to this new, more secure implementation. The recryptonator _periodically_ reads the ciphertext from the Kubernetes secret, decrypts it, rotates the transit key, reencrypts the secrets with the new key, and stores the new ciphertext back in the Kubernetes secret. The periodicity is achieved by running a CronJob in the Kubernetes cluster - in the example - every day at 3:00AM. It can certainly be run more frequently as the whole process takes no more tham 150ms (with substantial logging).
+- **recryptonator.py** which implements the key rotation which is central to this new, more secure implementation. The recryptonator _periodically_ reads the ciphertext from the Kubernetes secret, decrypts it, rotates the transit key, reencrypts the secrets with the new key, and stores the new ciphertext back in the Kubernetes secret. The periodicity is achieved by running a CronJob in the Kubernetes cluster - in the example - every day at 3:00AM. It can certainly be run more frequently as the whole process takes no more tham 150ms (with substantial logging).
 
