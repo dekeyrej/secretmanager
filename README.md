@@ -2,18 +2,7 @@
 
 ### Important note!
 
-_With no gymnastics, this works with Python 3.12 and eralier.  It will fail with Python 3.13 (or later) unless 1) your Kubernetes cluster's ca.crt _and_ your vault ca.crt both implement `keyUsage=critical,digitalSignature,keyEncipherment`.  The newly defaulted SSL behavior requiring_ `VERIFY_X509_STRICT` _breaks the Kubernetes client and Vault over SSL functionality._
-
-```python
-    import ssl
-    import requests
-
-    context = ssl.create_default_context()
-    context.verify_flags &= ~ssl.VERIFY_X509_STRICT
-    requests.get("https://example.com", verify=False, ssl_context=context)
-```
-
-_and remove it once I've captured the recipe for key SSL cert creation that  eliminates the problem. [**1**](https://github.com/canonical/microk8s/issues/4864)_
+_With no gymnastics, this works with Python 3.12 and eralier.  It will fail with Python 3.13 (or later) - [see details for a fix here](python_ssl_summary.md) 
 
 ## Why a SecretManager?
 
