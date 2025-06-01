@@ -2,7 +2,7 @@ import json
 from secretmanager import SecretManager
 
 vault_url        = "https://192.168.86.60:8200"
-ca_cert          = "ca.crt"
+ca_cert          = True
 role             = "demo"
 service_account  = "default"
 transit_key      = "aes256-key"

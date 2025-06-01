@@ -2,7 +2,7 @@
 
 ### Important note!
 
-_Currently this implentation is NOT Python 3.13 (or later) compatible.  The newly defaulted SSL behavior requiring_ `VERIFY_X509_STRICT` _breaks the Kubernetes client and Vault over SSL functionality. I'll edit this note once I have a suitable hack to mitigate this 'enhancement',_
+_With no gymnastics, this works with Python 3.12 and eralier.  It will fail with Python 3.13 (or later) unless 1) your Kubernetes cluster's ca.crt _and_ your vault ca.crt both implement `keyUsage=critical,digitalSignature,keyEncipherment`.  The newly defaulted SSL behavior requiring_ `VERIFY_X509_STRICT` _breaks the Kubernetes client and Vault over SSL functionality._
 
 ```python
     import ssl
