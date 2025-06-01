@@ -1,6 +1,8 @@
 # Python 3.13, Kubernetes, and Vault – SSL Troubles & Fixes  
 
-With Python 3.13 enforcing `VERIFY_X509_STRICT` by default, both the Python Kubernetes client and Vault encountered **SSL verification failures** due to certificate issues. Here’s how I resolved them.
+With Python 3.13 enforcing `VERIFY_X509_STRICT` by default, both the Python Kubernetes client and Vault encountered **SSL verification failures** with locally generated certifiactes due to issues with Certificate Authority configuration and certificate without IP-based SANs. Here’s how I resolved them.
+
+If you're using proper RFC 5280 and RFC 2818 ca-certs and server-certs for your cluster and vault, you'll likely not see these issues.
 
 ---
 
@@ -106,10 +108,10 @@ I streamlined everything by using the MicroK8s CA to generate Vault’s certs in
 This ensures consistent compliance across services.
 So far, it’s working well—but time will tell!
 
-Bonus: Common Confusion
+### Bonus: Common Confusion
 🔹 IP-based SAN ≠ IP-based Storage Area Network 😆
 Turns out, they are completely unrelated—lesson learned!
 
-Final Thoughts
+### Final Thoughts
 This setup has eliminated Python 3.13 SSL errors, restored Kubernetes API functionality, and made Vault authentication work again.
 Hope this helps anyone running into similar issues! 

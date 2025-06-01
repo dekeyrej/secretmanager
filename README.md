@@ -2,11 +2,11 @@
 
 ### Important note!
 
-_With no gymnastics, this works with Python 3.12 and eralier.  It will fail with Python 3.13 (or later) - [see details for a fix here](python_ssl_summary.md) 
+_With no gymnastics_, this works with Python 3.12 and earlier.  It may fail with Python 3.13 (or later) - [see details for a fix here](python_ssl_summary.md) 
 
 ## Why a SecretManager?
 
-I've been considering the "where does the first secret live?" question for a while now.  Kubernetes is not a secrets management platform, though it provides some functionailty in that regard. The 'typical' solutions for pure Kubernetes-controlled secrets still leave that 'first secret' exposed - somewhere.  This library is my latest attempt at protecting that first secret.
+I've been considering the "where does the first secret live?" question for a while now.  Kubernetes is not a secrets management platform, though it provides some functionailty in that regard. The 'typical' solutions for pure Kubernetes-controlled secrets still leave that 'first secret' exposed - somewhere.  This library is my latest attempt at protecting that first secret inside HashiCorp's vault.
 
 ## History (well _my_ history with this question)
 
