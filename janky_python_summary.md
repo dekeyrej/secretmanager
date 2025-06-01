@@ -4,14 +4,14 @@ The newly - as of 3.13 - defaulted SSL behavior requiring `VERIFY_X509_STRICT` b
 
 ## Kubernetes (microk8s 1.32.3)
 
-The default CA Certificate generated for the cluster does not assert the `keyUsage=critical,digitalSignature,keyCertSign` attribute which causes any Python-kubernetes API calls to fails (rather spectacularly, by the way).  It is relatively straight forward to address right after you install the microk8s snap, slightly more convoluted if you already have a multi-node cluster running.  The short version is:
+The default CA Certificate generated for the cluster does not assert the `keyUsage=critical,digitalSignature,keyCertSign` attribute which causes any Python-kubernetes API calls to fails (rather spectacularly, by the way).  It is relatively straight forward to address right after you install the microk8s snap, slightly more convoluted if you already have a multi-node cluster running.  The short version is: [Original Post](https://github.com/canonical/microk8s/issues/4864)
 
 ```
 cd /var/snap/microk8s/current/certs
 mkdir cadir
 openssl genrsa -out cadir/ca.key 2048
 openssl req -x509 -new -nodes -key ca.key -sha256 -days 360 -out cadir/ca.crt -addext "keyUsage=critical,digitalSignature,keyCertSign"
-microk8s refresh-certs cadir [Original Post](https://github.com/canonical/microk8s/issues/4864)
+microk8s refresh-certs cadir 
 ```
 
 If you're modifying an existing cluster, you'll have to tear it all down:
