@@ -16,7 +16,7 @@ def parse_args():
     parser.add_argument('--path', default="secrets.json", help="Path to your secrets file")
     parser.add_argument('--keyname', default="aes256-key", help="Vault transit key for encryption")
     parser.add_argument('--ns', default="default", help="Kubernetes namespace where the secret will be created (default: default)")
-    parser.add_argument('--secretname', default="matrix-secrets7", help="Name of the Kubernetes secret to create")
+    parser.add_argument('--secretname', default="matrix-secrets", help="Name of the Kubernetes secret to create")
     parser.add_argument('--dataname', default="secrets.json", help="Name of the data field in the Kubernetes secret")
     parser.add_argument('--v', dest='validate', action='store_true', help="Whether to validate the secrets file (default: False)")
     return parser.parse_args()

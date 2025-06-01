@@ -7,7 +7,7 @@ role             = "demo"
 service_account  = "default"
 transit_key      = "aes256-key"
 namespace        = "default"
-secret_name      = "matrix-secrets7"
+secret_name      = "matrix-secrets"
 secret_data_name = "secrets.json"
 
 sm = SecretManager(vault_url, service_account, role, ca_cert)

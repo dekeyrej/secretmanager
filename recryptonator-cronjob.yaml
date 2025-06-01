@@ -28,7 +28,7 @@ spec:
             - name: NAMESPACE
               value: "default"
             - name: SECRET_NAME
-              value: "matrix-secrets7"
+              value: "matrix-secrets"
             - name: SECRET_DATA_NAME
               value: "secrets.json"
             - name: VALIDATE

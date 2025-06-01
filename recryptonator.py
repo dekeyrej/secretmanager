@@ -11,7 +11,7 @@ role             = os.getenv("ROLE", "demo")
 service_account  = os.getenv("SERVICE_ACCOUNT", "default")
 transit_key      = os.getenv("TRANSIT_KEY", "aes256-key")
 namespace        = os.getenv("NAMESPACE", "default")
-secret_name      = os.getenv("SECRET_NAME", "matrix-secrets7")
+secret_name      = os.getenv("SECRET_NAME", "matrix-secrets")
 secret_data_name = os.getenv("SECRET_DATA_NAME", "secrets.json")
 validate         = os.getenv("VALIDATE", "1")  # Set to True if you want to validate the secrets file
 
