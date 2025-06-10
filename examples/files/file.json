@@ -1,0 +1,4 @@
+{
+    "db_host" : "mypostgres.kubegres",
+    "db_port" : "5432"
+}

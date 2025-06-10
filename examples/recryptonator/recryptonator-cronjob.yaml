@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: recryptonator
+  name: vault-key-purge-9000
 spec:
   schedule: "0 3 * * *"  # Runs daily at 3 AM
   jobTemplate:
@@ -9,14 +9,14 @@ spec:
       template:
         spec:
           containers:
-          - name: recryptonator
+          - name: vault-key-purge-9000
             image: ghcr.io/dekeyrej/recryptonator-image:latest  # Replace with your container image
             imagePullPolicy: Always
             securityContext:
               privileged: false
             env:
             - name: VAULT_URL
-              value: "https://192.168.86.60:8200"
+              value: "https://192.168.86.9:8200"
             - name: CA_CERT
               value: "/code/ca.crt"
             - name: ROLE
