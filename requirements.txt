@@ -16,7 +16,7 @@ durationpy==0.10
     # via kubernetes
 google-auth==2.40.3
     # via kubernetes
-havc==1.4.0
+hvac==2.3.0
     # via dekeyrej-secretmanager (pyproject.toml)
 idna==3.10
     # via requests
@@ -39,10 +39,10 @@ python-dotenv==1.1.0
 pyyaml==6.0.2
     # via
     #   dekeyrej-secretmanager (pyproject.toml)
-    #   havc
     #   kubernetes
 requests==2.32.3
     # via
+    #   hvac
     #   kubernetes
     #   requests-oauthlib
 requests-oauthlib==2.0.0
