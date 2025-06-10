@@ -28,7 +28,7 @@ Beyond the library and the Vault, there are three Python components that compris
 
 - **encryptonator.py** is run once* to read the plaintext file (text-based, but no formatting assumed), encrypt that file with the transit key, and load the ciphertext into the target Kubernetes secret. (once* at startup, and anytime the base plaintext is changed)
 
-- **readstub.py** which is a surrogate implementation for reading the ciphertext from the Kubernetes secret, and decrypting the secret resulting in a usable set of values.
+- **kubevault_example.py** which is a surrogate implementation for reading the ciphertext from the Kubernetes secret, and decrypting the secret resulting in a usable set of values.
 
 - **recryptonator.py** which implements the key rotation which is central to this new, more secure implementation. The recryptonator _periodically_ reads the ciphertext from the Kubernetes secret, decrypts it, rotates the transit key, reencrypts the secrets with the new key, and stores the new ciphertext back in the Kubernetes secret. The periodicity is achieved by running a CronJob in the Kubernetes cluster - in the example - every day at 3:00AM. It can certainly be run more frequently as the whole process takes no more tham 150ms (with substantial logging).
 
