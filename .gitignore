@@ -4,3 +4,4 @@ pyvenv.cfg
 secrets.json
 dekeyrej_secretmanager.egg-info/
 dist/
+examples/draft-README.md

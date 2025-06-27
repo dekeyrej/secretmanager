@@ -11,3 +11,6 @@
 # preplan publisher on pypi
 
 bumpver update --allow-dirty --patch
+
+git tag -d main
+git push origin --delete refs/tags/main
