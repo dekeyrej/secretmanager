@@ -1,5 +1,11 @@
 # SecretManager
 
+![MIT License](https://img.shields.io/github/license/dekeyrej/secretmanager)
+![Last Commit](https://img.shields.io/github/last-commit/dekeyrej/secretmanager)
+![Repo Size](https://img.shields.io/github/repo-size/dekeyrej/secretmanager)
+[![PyPI](https://img.shields.io/pypi/v/dekeyrej-secretmanager)](https://pypi.org/project/dekeyrej-secretmanager/)
+![Build Status](https://github.com/dekeyrej/secretmanager/actions/workflows/publish-to-test-pypi.yml/badge.svg)
+
 ### Important note!
 
 _With no gymnastics_, this works with Python 3.12 and earlier. It may fail with Python 3.13 (or later) — [see details for a fix here](python_ssl_summary.md)

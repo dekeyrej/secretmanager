@@ -3,7 +3,7 @@ from setuptools import find_packages, setup
 setup(
     name='secretmanager',
     packages=find_packages(include=['secretmanager']),
-    version='1.0.1',
+    version='1.0.2',
     description='Multi-mode secret management library for Kubernetes and Vault',
     author='Joseph S. DeKeyrel',
     license='MIT',
