@@ -1,6 +1,13 @@
 name: Publish Python 🐍 distribution 📦 to PyPI and TestPyPI
 
-on: push
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'setup.py'
+      - 'pyproject.toml'
+      - 'secretmanager/**'
 
 jobs:
   build:
