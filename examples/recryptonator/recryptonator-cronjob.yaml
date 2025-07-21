@@ -2,6 +2,7 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: vault-key-purge-9000
+  namespace: default
 spec:
   schedule: "0 3 28 * *"  # Runs daily at 3 AM
   jobTemplate:
