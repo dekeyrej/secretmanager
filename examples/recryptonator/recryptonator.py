@@ -1,12 +1,11 @@
 import json
 import logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 import os
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../secretmanager')))
 
 from secretmanager import SecretManager
-
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 config = {
     "SOURCE"         : "KUBEVAULT",

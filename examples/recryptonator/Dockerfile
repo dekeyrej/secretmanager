@@ -12,7 +12,6 @@ RUN python check_and_append_cacert.py
 FROM python:slim
 COPY --from=builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH" \
-    PROD=1 \
     PYTHONUNBUFFERED=1
 WORKDIR /code
 COPY examples/recryptonator/recryptonator.py .
