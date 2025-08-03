@@ -1,9 +1,0 @@
-encryptonator.py
-get_service_account_token.py
-# Ignore Python cache files
-__pycache__/
-*.json
-pyvenv.cfg
-my-app-policy.hcl
-readstub.py
-build.sh

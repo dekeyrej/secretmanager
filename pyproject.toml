@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
     name = "dekeyrej-secretmanager"
     version = "1.0.2"
-    description = "base classes for microservice servers and matrix display pages"
+    description = "Modular secret management with Vault, Kubernetes, Environment and file backends."
     readme = "README.md"
     authors = [{name = "Joseph S. DeKeyrel", email = "joedekeyrel@gmail.com"}]
     license = { file = "LICENSE" }
@@ -16,12 +16,18 @@ build-backend = "setuptools.build_meta"
     ]
     keywords = []
     dependencies = [
-        "PyYAML",
+        "pyyaml",
         "kubernetes",
+        "requests",
         "hvac",
         "python-dotenv"
     ]
     requires-python = ">=3.9"
+
+    [tool.setuptools.packages.find]
+    where = ["."]
+    include = ["secretmanager*"]
+
 
 [tool.bumpver]
 current_version = "1.0.2"

@@ -1,32 +1,33 @@
-import sys
-import os
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../secretmanager')))
 
 from secretmanager import SecretManager
 
 log_level = "INFO"
-config = {
+secretcfg = {
     "SOURCE": "ENVIRONMENT"
 }
-environment_definition = 'examples/environment/env_definition.json'
-definition_type        = 'JSON'
-environment_file       = 'examples/environment/env.env'
 
+sm = SecretManager(secretcfg, log_level)
 
-sm = SecretManager(config, log_level)
-secrets = sm.read_secrets(environment_definition, env_file=environment_file, definition_type=definition_type)
+secretdef = {
+    "env_def_file": 'examples/environment/env_definition.json',
+    "env_file": 'examples/environment/env.env',
+    "definition_type": 'JSON'
+}
+
+secrets = sm.read_secrets(secretdef)
 
 print("JSON Definition:")
 for key in secrets:
     print(f"{key}: {secrets[key]}")
 
-environment_definition = 'examples/environment/env_definition.yaml'
-definition_type        = 'YAML'
-environment_file       = 'examples/environment/env.env'
+secretdef = {
+    "env_def_file": 'examples/environment/env_definition.yaml',
+    "env_file": 'examples/environment/env.env',
+    "definition_type": 'YAML'
+}
 
+secrets = sm.read_secrets(secretdef)
 
-secrets = sm.read_secrets(environment_definition, env_file=environment_file, definition_type=definition_type)
 print("\nYAML Definition:")
 for key in secrets:
     print(f"{key}: {secrets[key]}")

@@ -1,20 +1,20 @@
 #Builder stage
-FROM python:3.12-slim AS builder
+FROM python:slim AS builder
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 COPY requirements.txt .
 RUN . /opt/venv/bin/activate
 RUN pip install -r requirements.txt
-COPY examples/vault_ssl_support/check_and_append_cacert.py .
-COPY examples/vault_ssl_support/ca.crt .
+RUN pip install dekeyrej-secretmanager
+COPY tools/check_and_append_cacert.py .
+COPY tools/certs/ca.crt ./certs/ca.crt
 RUN python check_and_append_cacert.py
 #Operational stage
-FROM python:3.12-slim
+FROM python:slim
 COPY --from=builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH" \
     PYTHONUNBUFFERED=1
 WORKDIR /code
-COPY examples/recryptonator/recryptonator.py .
-COPY secretmanager/secretmanager.py .
-# COPY ca.crt .
+COPY tools/recryptonator.py .
+# COPY secretmanager/ .
 CMD ["sh", "-c", "python /code/recryptonator.py"]
