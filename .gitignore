@@ -5,5 +5,3 @@ secrets.json
 dekeyrej_secretmanager.egg-info/
 dist/
 examples/draft-README.md
-ca.crt
-check_and_append_cacert.py

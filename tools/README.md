@@ -5,6 +5,15 @@
 
 This repository presents a secure approach to managing secrets within your Kubernetes cluster leveraging HashiCorp Vault’s robust capabilities. While this was developed for my homelab cluster; it’s intended to be a solid foundation for implementing a “Secret Zero” strategy – minimizing risk by reducing the attack surface and limiting the exposure of sensitive information.
 
+## 🛠️ Tools Directory
+
+This directory contains operational utilities for managing secrets in Kubernetes using HashiCorp Vault. Each script is designed to be run independently and demonstrates secure practices for encryption, decryption, and key rotation.
+
+These tools are:
+- **Runnable**: Designed for direct execution
+- **Composable**: Built atop the `secretmanager` module
+- **Secure**: Follow ephemeral, least-privilege principles
+
 **Why This Matters: Embracing Secret Zero**
 
 The "Secret Zero" philosophy centers on the principle of minimizing the risk of compromised secrets.  Traditional methods of managing secrets—storing them directly in configuration files, environment variables, or with static keys—present significant vulnerabilities. This project aims to address these concerns by leveraging proven techniques for secure encryption and rotation.
@@ -18,14 +27,12 @@ The "Secret Zero" philosophy centers on the principle of minimizing the risk of 
 *   **Automated Key Rotation:**  Given the actual frequency of accessing the secrets (a few times per week), the actual risk of compromise of the AES-256 key is low (but not zero) - key rotation can reduce the risk even lower.  The `recryptonator` implements this by periodically rotating the transit key, mitigating the risk associated with long-lived keys and bolstering security.
 *   **Streamlined Workflow:** These three examples (Encryptionator, Kubevault-Example, and Recryptonator) guide you through the complete process, making it easier to implement a secure secret management strategy.
 
-**Key Components & Examples**
-
 1.  **Encryptonator: Initial Secret Encryption**
 
     *   **What it Does:** The `Encryptionator` initially encrypts your secrets dictionary using the current transit key, and stores the ciphertext as a Kubernetes secret. The connection details for connecting the Kubernetes cluster and the Vault are provided in the config dictionary.  The remaining values (file_path to the plaintext JSON file, the name of the transit_key, the namespace, name, secret_data_name, and read_type of the destination Kubernetes secret) are also specified in the frontmatter of the code.  If validate is set to True, after the ciphertext is stored in the Kubernetes secret, it is retrieved, decrypted and compared to the source dictionary.  The example [priviledge file](https://github.com/dekeyrej/secretmanager/tree/main/examples/encryptonator/my-app-policy.hcl) provides a 'least priviledge' approach.
     *   **Use Case:** The initial step in securing your secrets for transport. Ideally only used once in your clusters lifecycle.
     *   **Usage:** `python encryptionator.py`
-    *   **[Link to Encryptionator Code](https://github.com/dekeyrej/secretmanager/tree/main/examples/encryptonator)**
+    *   **[Link to Encryptionator Code](https://github.com/dekeyrej/secretmanager/tree/main/tools/encryptonator)**
 
 2.  **Kubevault-Example: Just What Your Application Needs**
     *   **What it Does:**  This example demonstrates the secure extraction and decryption of the encrypted secrets using the current transit key.  It's a critical step in verifying the system's functionality. This is the 'read stub' if you will for your application to retrieve it's secrets at initialization.  The same connection parameters are again enumerated in the config dictionary. In this instance though, there is a second 'secretdef' dictionary that captures all of the parameters for the particular secret to be retrieved/decrypted.
@@ -37,7 +44,7 @@ The "Secret Zero" philosophy centers on the principle of minimizing the risk of 
     *   **What it Does:** This component automatically rotates the transit key (a feature provided by the Vault), providing a core component of a robust secret management strategy that ensures key lifecycle hygiene.  This is where the magic happens – securing the key itself. Of course, simply rotating the key would break the entire mechanism - the new key will not work to decrypt the ciphertext created with the old key, so recryptonator grabs the ciphertext from the Kubetnetes secret, decrypts it into plaintext using the current key, rotates the key, reencrypts the plaintext into ciphertext using the new key, and stores the new ciphertext into the Kubernetes secret.  This rotation is scheduled as a CronJob at whatever frequency is necessary to minimize exposure of the transit key (I rotate mine once per month).  Like encryptonator.py, the connection and secret data are provided in the frontmatter of the example.
     *   **Use Case:**  Automated key rotation minimizes the impact of a compromised transit key.
     *   **Command:** `python recryptonator.py`
-    *   **[Link to Recryptonator Code](https://github.com/dekeyrej/secretmanager/tree/main/examples/recryptonator)**
+    *   **[Link to Recryptonator Code](https://github.com/dekeyrej/secretmanager/tree/main/tools/recryptonator)**
 
 **Targeting Security Professionals**
 
