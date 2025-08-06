@@ -40,7 +40,7 @@ class SecretManager:
         elif self.config and self.config.get("SOURCE") != config.get("SOURCE"):
             logger.info(
                 f"""Changing configuration source from {self.config.get('SOURCE')} """
-                    f"""to {config.get('SOURCE')}"""
+                f"""to {config.get('SOURCE')}"""
             )
             self.execute(self.config.get("SOURCE"), "LOGOUT")
         elif self.config and self.config.get("SOURCE") == config.get("SOURCE"):
