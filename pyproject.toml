@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
     name = "dekeyrej-secretmanager"
-    version = "1.0.2"
+    version = "1.1.1"
     description = "Modular secret management with Vault, Kubernetes, Environment and file backends."
     readme = "README.md"
     authors = [{name = "Joseph S. DeKeyrel", email = "joedekeyrel@gmail.com"}]
@@ -30,7 +30,7 @@ build-backend = "setuptools.build_meta"
 
 
 [tool.bumpver]
-current_version = "1.0.2"
+current_version = "1.1.1"
 version_pattern = "'MAJOR.MINOR.PATCH[PYTAGNUM]"
 commit_message = "bump version {old_version} -> {new_version}"
 tag_message = "{new_version}"
@@ -43,8 +43,4 @@ push = false
 "pyproject.toml" = [
     'current_version = "{version}"',
     'version = "{version}"',
-]
-"setup.py" = [
-    "{version}",
-    "{pep440_version}",
 ]
