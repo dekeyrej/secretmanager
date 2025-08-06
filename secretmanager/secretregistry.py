@@ -5,14 +5,14 @@ from secretmanager._kubevault_ops import (
     read_encrypted_secrets,
     create_encrypted_secret,
     rotate_vault_key,
-    logout_kubevault
+    logout_kubevault,
 )
 
 from secretmanager._k8s_ops import (
     connect_to_k8s,
     read_k8s_secret,
     create_k8s_secret,
-    logout_k8s
+    logout_k8s,
 )
 
 from secretmanager._source_loader import (
@@ -22,7 +22,7 @@ from secretmanager._source_loader import (
     init_file,
     init_environment,
     logout_file,
-    logout_environment
+    logout_environment,
 )
 
 SECRET_VERB_REGISTRY = {

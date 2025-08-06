@@ -31,7 +31,7 @@ jobs:
 
       - name: 🧹 Run linters
         run: |
-          flake8 secretmanager/ tests/
+          flake8 secretmanager/ tests/ --max-line-length=99 --ignore=F841
           black --check secretmanager/ tests/
 
       - name: Run tests

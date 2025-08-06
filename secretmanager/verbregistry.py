@@ -7,11 +7,12 @@
 #         return func
 #     return decorator
 
+
 class VerbRegistry:
     VERBS = {"INIT", "READ", "CREATE", "ROTATE", "LOGOUT"}
 
     def __init__(self, registry):
-        self._registry = registry # or REGISTRY
+        self._registry = registry  # or REGISTRY
 
     def get_handler(self, source: str, verb: str):
         source_map = self._registry.get(source.upper())
@@ -27,7 +28,7 @@ class VerbRegistry:
 
     def list_verbs(self, source: str):
         return list(self._registry.get(source.upper(), {}).keys())
-    
+
     def validate(self):
         for source, verbs in self._registry.items():
             for verb, handler in verbs.items():
@@ -42,4 +43,4 @@ class VerbRegistry:
         try:
             return self.get_handler(backend, verb)
         except ValueError:
-            return None        
+            return None
