@@ -4,7 +4,7 @@
 ![Last Commit](https://img.shields.io/github/last-commit/dekeyrej/secretmanager)
 ![Repo Size](https://img.shields.io/github/repo-size/dekeyrej/secretmanager)
 [![PyPI](https://img.shields.io/pypi/v/dekeyrej-secretmanager)](https://pypi.org/project/dekeyrej-secretmanager/)
-[![codecov](https://codecov.io/gh/your-username/your-repo/branch/main/graph/badge.svg)](https://codecov.io/gh/dekeyrej/secretmanager)
+[![codecov](https://codecov.io/gh/dekeyrej/secretmanager/branch/main/graph/badge.svg)](https://codecov.io/gh/dekeyrej/secretmanager)
 ![Build Status](https://github.com/dekeyrej/secretmanager/actions/workflows/ci.yml/badge.svg)
 
 ### Important note!
