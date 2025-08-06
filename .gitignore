@@ -7,3 +7,4 @@ dist/
 examples/draft-README.md
 *.noyml
 .coverage
+coverage.xml
