@@ -8,7 +8,6 @@ secretcfg = {
     "kube_config": None
 }
 sm = SecretManager(secretcfg, log_level)
-k8s_client = sm.k8s_client
 
 secrets = {}
 
@@ -19,7 +18,11 @@ secretdef1 = {
     "read_type": "SECRET",
     "read_key": None
 }
-secrets.update(sm.read_secrets(k8s_client, secretdef1))
+msresult = sm.execute("KUBERNETES", "READ", sm, secretdef1)
+if msresult.get("status") == "success":
+    logging.debug(f"Read Secret: {msresult.get('data')}")
+    secrets.update(msresult.get("data"))
+
 
 # read multiple configMap data values from one configMap
 secretdef2 = {
@@ -28,7 +31,10 @@ secretdef2 = {
     "read_type": "CONFIG_MAP",
     "read_key": None
 }
-secrets.update(sm.read_secrets(k8s_client, secretdef2))
+cmresult = sm.execute("KUBERNETES", "READ", sm, secretdef2)
+if cmresult.get("status") == "success":
+    logging.debug(f"Read ConfigMap: {cmresult.get('data')}")
+    secrets.update(cmresult.get("data"))
 
 # read single secret data value (by key) from one secret
 secretdef3 = {
@@ -37,7 +43,10 @@ secretdef3 = {
     "read_type": "SECRET",
     "read_key": ".dockerconfigjson"
 }
-secrets.update({secretdef3["read_key"]: sm.read_secrets(k8s_client, secretdef3)})
+ssresult = sm.execute("KUBERNETES", "READ", sm, secretdef3)
+if ssresult.get("status") == "success":
+    logging.debug(f"Read Secret: {ssresult.get('data')}")
+    secrets.update({secretdef3["read_key"]: ssresult.get("data")})
 
 logging.info("Combined Secrets:")
 for key in secrets:

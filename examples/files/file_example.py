@@ -12,7 +12,11 @@ secret_def = {
     "file_type": 'JSON'
 }
 
-jssecrets = sm.read_secrets(secret_def)
+jsreturn = sm.execute(secretcfg.get("SOURCE"), "READ", secret_def)
+if not jsreturn.get("status") == "success":
+    print(f"Error reading secrets: {jsreturn.get('error', 'Unknown error')}")
+    exit(1)
+jssecrets = jsreturn.get("data", {})
 
 print("JSON Secrets:")
 for key in jssecrets:
@@ -24,6 +28,10 @@ secret_def = {
 }
 
 print("\nYAML Secrets:")
-ymsecrets = sm.read_secrets(secret_def)
+ymreturn = sm.execute(secretcfg.get("SOURCE"), "READ", secret_def)
+if not ymreturn.get("status") == "success":
+    print(f"Error reading secrets: {ymreturn.get('error', 'Unknown error')}")
+    exit(1)
+ymsecrets = ymreturn.get("data", {})
 for key in ymsecrets:
     print(f"{key}: {ymsecrets[key]}")

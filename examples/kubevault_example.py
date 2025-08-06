@@ -19,15 +19,20 @@ secretdef = {
     "read_type"  : "SECRET",
     "secret_name": "matrix-secrets",
     "namespace"  : "default",
-    "secret_key" : "secrets.json",
+    "read_key" : "secrets.json",
     "transit_key": "aes256-key"
 }
 
 log_level        = logging.INFO
 
-sm = SecretManager(secretcfg, log_level)  #, or
-# sm = SecretManager()
-# sm.configure_secret_type(secretcfg)
-secrets = sm.read_secrets(secretdef)
-logger.info(f"Secrets:\n{json.dumps(secrets, indent=4)}")
-sm.logout_vault()
+sm = SecretManager(secretcfg, log_level)
+try:
+    read_result = sm.execute(secretcfg.get("SOURCE"), "READ", sm, secretdef)
+    if read_result.get("status") == "success":
+        logger.info("Secrets retrieved successfully.")
+    else:
+        logger.error(f"Failed to retrieve secrets: {read_result.get('error', 'Unknown error')}")
+    logger.info(f"Secrets:\n{json.dumps(read_result.get('data', {}), indent=4)}")
+except Exception as e:
+    logger.error(f"An error occurred: {e}")
+result = sm.execute(secretcfg.get("SOURCE"), "LOGOUT", sm)

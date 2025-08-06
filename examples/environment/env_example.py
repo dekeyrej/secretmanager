@@ -1,4 +1,3 @@
-
 from secretmanager import SecretManager
 
 log_level = "INFO"
@@ -14,11 +13,15 @@ secretdef = {
     "definition_type": 'JSON'
 }
 
-secrets = sm.read_secrets(secretdef)
+jsreturn = sm.execute(secretcfg.get("SOURCE"), "READ", secretdef)
+if not jsreturn.get("status") == "success":
+    print(f"Error reading secrets: {jsreturn.get('error', 'Unknown error')}")
+    exit(1)
+jssecrets = jsreturn.get("data", {})
 
 print("JSON Definition:")
-for key in secrets:
-    print(f"{key}: {secrets[key]}")
+for key in jssecrets:
+    print(f"{key}: {jssecrets[key]}")
 
 secretdef = {
     "env_def_file": 'examples/environment/env_definition.yaml',
@@ -26,8 +29,12 @@ secretdef = {
     "definition_type": 'YAML'
 }
 
-secrets = sm.read_secrets(secretdef)
+ymreturn = sm.execute(secretcfg.get("SOURCE"), "READ", secretdef)
+if not ymreturn.get("status") == "success":
+    print(f"Error reading secrets: {ymreturn.get('error', 'Unknown error')}")
+    exit(1)
+ymsecrets = ymreturn.get("data", {})
 
 print("\nYAML Definition:")
-for key in secrets:
-    print(f"{key}: {secrets[key]}")
+for key in ymsecrets:
+    print(f"{key}: {ymsecrets[key]}")

@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main, refactor/**]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-test:
+    name: 🧹 Lint & 🧪 Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.9, 3.10, 3.11, 3.12, 3.13]
+
+    steps:
+      - name: 🧾 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: 📦 Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 🧹 Run linters
+        run: |
+          flake8 secretmanager/ tests/
+          black --check secretmanager/ tests/
+
+      - name: Run tests
+        run: |
+          pytest --cov=secretmanager --cov-report=xml
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

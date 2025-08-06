@@ -1,0 +1,40 @@
+name: Publish to PyPI
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'pyproject.toml'
+      - 'secretmanager/**'
+
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
+
+jobs:
+  build-and-publish:
+    name: 📦 Build & 🚀 Publish
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 🧾 Checkout code
+      uses: actions/checkout@v4
+
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+
+    - name: 🔧 Install pypa/build
+      run: |
+          python -m pip install --upgrade pip
+          pip install build twine
+    
+    - name: 🏗️ Build package
+      run: python3 -m build
+
+    - name: 🚀 Publish to PyPI via Trusted Publisher
+      uses: pypa/gh-action-pypi-publish@v1.8.10
+      with:
+        repository-url: https://upload.pypi.org/legacy/

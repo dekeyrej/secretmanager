@@ -41,7 +41,7 @@ secretdef = {
     "read_type"  : "SECRET",
     "secret_name": "matrix-secrets",
     "namespace"  : "default",
-    "secret_key" : "secrets.json",
+    "read_key" : "secrets.json",
     "transit_key": "aes256-key"
 }
 
@@ -49,14 +49,14 @@ log_level        = logging.INFO
 validate         =  True
 
 sm = SecretManager(secretcfg, log_level)
-sm.create_encrypted_secret(secretdef, secrettext)
+sm.execute(secretcfg.get("SOURCE"), "CREATE", sm, secretdef, secrettext)
 
 if validate:
-    read_secrets = sm.read_secrets(secretdef)
+    read_result = sm.execute(secretcfg.get("SOURCE"), "READ", sm, secretdef)
 
-    if secrets != read_secrets:
+    if secrets != read_result.get("data", {}):
         logging.error("Validation failed: secrets do not match.")
         raise ValueError("Validation failed: secrets do not match.")
     else:
         logging.info("Validation successful: secrets match.")
-sm.logout_vault()
+result = sm.execute(secretcfg.get("SOURCE"), "LOGOUT", sm)

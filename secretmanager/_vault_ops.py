@@ -3,7 +3,7 @@ import json
 import logging
 from typing import Dict, Any
 import hvac
-from secretmanager._crypto_utils import encode_data, decode_data
+import secretmanager._crypto_utils as crypto_utils
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -19,7 +19,7 @@ def connect_to_vault(vault_url, ca_path=True):
     return hvac_client
 
 # The following methods handle vault authentication (via kubernetes), encryption and decryption as a service, and key rotation using Vault's transit secrets engine.
-def authenticate_vault_with_kubernetes(hvac_client, role, jwt):
+def _authenticate_vault_via_kubernetes(hvac_client, role, jwt):
     """Authenticates with Vault using Kubernetes auth method."""
     try:
         auth_response = hvac_client.auth.kubernetes.login(
@@ -37,7 +37,7 @@ def encrypt_data_with_vault(hvac_client, transit_key, data):
     try:
         response = hvac_client.secrets.transit.encrypt_data(
             name=transit_key,
-            plaintext=encode_data(data)
+            plaintext=crypto_utils.encode_data(data)
         )
         encrypted_data = response['data']['ciphertext']
         return encrypted_data
@@ -53,13 +53,13 @@ def decrypt_data_with_vault(hvac_client, transit_key, data):
             name=transit_key,
             ciphertext=data
         )
-        decrypted_data = decode_data(response['data']['plaintext'])
+        decrypted_data = crypto_utils.decode_data(response['data']['plaintext'])
         return decrypted_data
     except Exception as e:
         logger.error(f"Error decrypting data with Vault: {e}")
         return None
 
-def rotate_vault_key(hvac_client, transit_key):
+def _rotate_vault_key(hvac_client, transit_key):
     """Rotates a Vault transit key."""
     try:
         current_key = hvac_client.secrets.transit.read_key(name=transit_key)

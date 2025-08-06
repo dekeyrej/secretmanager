@@ -19,7 +19,7 @@ secretdef = {
     "read_type"  : "SECRET",
     "secret_name": "matrix-secrets",
     "namespace"  : "default",
-    "secret_key" : "secrets.json",
+    "read_key" : "secrets.json",
     "transit_key": "aes256-key"
 }
 
@@ -31,21 +31,28 @@ logging.info("🔥 Recryptonator initializing… preparing for vault key rotatio
 logging.debug("SecretManager initializing.")
 sm = SecretManager(secretcfg, log_level)
 logging.debug("Reading Kubernetes secret/ciphertext and decrypting with current vault transit key.")
-decrypted_data = sm.read_secrets(secretdef)
+read_status = sm.execute(secretcfg.get("SOURCE"), "READ", sm, secretdef)
+if read_status['status'] != "success":
+    logging.error(f"Failed to read secret: {read_status.get('error', 'Unknown error')}")
+    sys.exit(1)
+decrypted_data = read_status['data']
 logging.debug("Rotating vault key.")
-sm.rotate_vault_key(secretdef['transit_key'])
+rstatus = sm.execute(secretcfg.get("SOURCE"), "ROTATE", sm, secretdef.get("transit_key"))
+if rstatus['status'] != "success":
+    logging.error("Failed to rotate the Vault key.")
+    sys.exit(1)
 logging.debug("Re-encrypting data with new vault key, and updating Kubernetes secret with new ciphertext.")
-status = sm.create_encrypted_secret(secretdef, json.dumps(decrypted_data))['status']
+status = sm.execute(secretcfg.get("SOURCE"), "CREATE", sm, secretdef, json.dumps(decrypted_data))['status']
 if status != "success":
     logging.error("Failed to re-encrypt the secret with the new Vault key.")
     sys.exit(1)
 logging.info(f"Secret {secretdef['secret_name']} in namespace {secretdef['namespace']} has been re-encrypted with the new Vault key.")
 if validate:
-    new_decrypted_data = sm.read_secrets(secretdef)
+    new_decrypted_data = sm.execute(secretcfg.get("SOURCE"), "READ", sm, secretdef)['data']
 
     if decrypted_data != new_decrypted_data:
         logging.error("Validation failed: Secrets do not match.")
         raise ValueError("Validation failed: Secrets do not match.")
     else:
         logging.info("Validation successful: Secrets match.")
-sm.logout_vault()
+result = sm.execute(secretcfg.get("SOURCE"), "LOGOUT", sm)
