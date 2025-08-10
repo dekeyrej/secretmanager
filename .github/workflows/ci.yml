@@ -3,6 +3,9 @@ name: CI
 on:
   push:
     branches: [main, refactor/**]
+    paths:
+      - secretmanager/**
+      - tests/**
   pull_request:
     branches: [main]
 

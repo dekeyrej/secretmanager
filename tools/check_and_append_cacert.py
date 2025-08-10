@@ -6,7 +6,6 @@ with open(python_cacert, "r") as f:
     cacert = f.read()
 
 with open("tools/certs/ca.crt", "r") as f:
-# with open("ca.crt", "r") as f:
     local_cacert = f.read()
 pattern = r"{}".format(re.escape(local_cacert.strip()))
 
