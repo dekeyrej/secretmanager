@@ -1,4 +1,4 @@
-from secretmanager.manager import SecretManager
+from secretmanager import SecretManager
 
 log_level = "INFO"
 secretcfg = {
