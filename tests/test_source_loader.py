@@ -108,6 +108,7 @@ def test_read_secrets_from_file_missing_key():
 # --- create_secrets_file ---
 def test_create_secrets_file_json(tmp_path):
     import json
+
     manager = SecretManager()
 
     file_path = tmp_path / "secrets.json"
@@ -128,6 +129,7 @@ def test_create_secrets_file_json(tmp_path):
 
 def test_create_secrets_file_yaml(tmp_path):
     import yaml
+
     manager = SecretManager()
 
     file_path = tmp_path / "secrets.yaml"
