@@ -60,7 +60,7 @@ def test_read_secrets_from_file_json():
         tmp.write('{"api_key": "12345"}')
         tmp_path = tmp.name
     secret_def = {"file_name": tmp_path, "file_type": "JSON"}
-    assert read_secrets_from_file(manager,secret_def)["data"] == {"api_key": "12345"}
+    assert read_secrets_from_file(manager, secret_def)["data"] == {"api_key": "12345"}
 
 
 def test_read_secrets_from_file_yaml():
@@ -69,7 +69,7 @@ def test_read_secrets_from_file_yaml():
         tmp.write("api_key: 12345")
         tmp_path = tmp.name
     secret_def = {"file_name": tmp_path, "file_type": "YAML"}
-    assert read_secrets_from_file(manager,secret_def)["data"] == {"api_key": 12345}
+    assert read_secrets_from_file(manager, secret_def)["data"] == {"api_key": 12345}
 
 
 def test_read_secrets_from_file_bob():
