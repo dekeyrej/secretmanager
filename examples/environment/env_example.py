@@ -1,4 +1,4 @@
-from secretmanager import SecretManager
+from secretmanager.manager import SecretManager
 
 log_level = "INFO"
 secretcfg = {
@@ -13,7 +13,7 @@ secretdef = {
     "definition_type": 'JSON'
 }
 
-jsreturn = sm.execute(secretcfg.get("SOURCE"), "READ", secretdef)
+jsreturn = sm.execute(secretcfg.get("SOURCE"), "READ", sm, secretdef)
 if not jsreturn.get("status") == "success":
     print(f"Error reading secrets: {jsreturn.get('error', 'Unknown error')}")
     exit(1)
@@ -29,7 +29,7 @@ secretdef = {
     "definition_type": 'YAML'
 }
 
-ymreturn = sm.execute(secretcfg.get("SOURCE"), "READ", secretdef)
+ymreturn = sm.execute(secretcfg.get("SOURCE"), "READ", sm, secretdef)
 if not ymreturn.get("status") == "success":
     print(f"Error reading secrets: {ymreturn.get('error', 'Unknown error')}")
     exit(1)

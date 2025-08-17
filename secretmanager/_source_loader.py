@@ -44,7 +44,7 @@ def read_data_from_file(file_path: str) -> str:
 
 
 # SOURCE="ENVIRONMENT"
-def read_secrets_from_env(secret_def: dict) -> dict:
+def read_secrets_from_env(manager: SecretManager, secret_def: dict) -> dict:
     """Reads secrets from environment variables or a .env file"""
     import os
     from dotenv import load_dotenv
@@ -128,7 +128,7 @@ def load_yaml_secrets(rawsecrets: str) -> dict:
 
 
 # SOURCE="FILE"
-def read_secrets_from_file(secret_def: dict) -> dict:
+def read_secrets_from_file(manager: SecretManager, secret_def: dict) -> dict:
     """Return the loaded file secrets"""
     try:
         rawsecrets = read_data_from_file(secret_def["file_name"])
@@ -150,7 +150,7 @@ def read_secrets_from_file(secret_def: dict) -> dict:
 
 
 # SOURCE="FILE"
-def create_secrets_file(secret_def: dict, data: dict) -> dict:
+def create_secrets_file(manager: SecretManager, secret_def: dict, data: dict) -> dict:
     """Create a secrets file from the provided data"""
     if secret_def["file_type"] == "JSON":
         contents = json.dumps(data, indent=2)
