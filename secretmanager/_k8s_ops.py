@@ -6,6 +6,8 @@ from secretmanager.manager import SecretManager
 
 import secretmanager._crypto_utils as crypto_utils
 
+from secretmanager._source_loader import load_json_secrets
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -150,13 +152,21 @@ def read_k8s_secret(manager: SecretManager, secret_def: dict):
                 secrets = crypto_utils.decode_data(
                     api_response.data[secret_def["read_key"]]
                 )
-                return {
-                    "status": "success",
-                    "verb": "READ",
-                    "source": "KUBERNETES",
-                    "data": secrets,
-                }  # return raw secret
-            else:
+                if manager.config.get("SOURCE") == "KUBEVAULT":
+                    return {
+                        "status": "success",
+                        "verb": "READ",
+                        "source": "KUBEVAULT",
+                        "data": secrets,
+                    }  # return decrypted secret text
+                else: # manager.config.get("SOURCE") == "KUBERNETES":
+                    return {
+                        "status": "success",
+                        "verb": "READ",
+                        "source": "KUBERNETES",
+                        "data": load_json_secrets(secrets)
+                    }  # return dict of secrets from the secret text
+            else: # secret_def.get("read_key") is None: - return all secrets in the secret
                 secrets = {}
                 for data_name in api_response.data:
                     logger.debug(

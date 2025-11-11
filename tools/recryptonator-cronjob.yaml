@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: vault-key-purge-9000
 spec:
-  schedule: "0 3 * * *"  # Runs daily at 3 AM
+  schedule: "0 3 15 * *"  # Runs on the 15th of each month at 3 AM
   jobTemplate:
     spec:
       template:
