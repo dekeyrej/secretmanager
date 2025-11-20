@@ -3,6 +3,7 @@ import json
 import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 import sys
+import os
 
 from secretmanager import SecretManager
 
@@ -36,6 +37,11 @@ secretcfg = {
     "role"           : "demo",
     "ca_cert"        : True                         # True if certifi's PEM file has been patched
 }
+
+if os.getenv("VAULT_URL"):
+    secretcfg["vault_url"] = os.getenv("VAULT_URL")
+else:
+    secretcfg["vault_url"] = "https://192.168.86.9:8200"
 
 secretdef = {
     "read_type"  : "SECRET",
