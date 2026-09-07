@@ -4,37 +4,16 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 import sys
 import os
 
-
 from secretmanager import SecretManager
 
+with open("secretcfg.json") as f:
+    secretcfg = json.loads(f.read())
 
-
-secretcfg = {
-    "SOURCE"         : "KUBEVAULT",
-    "kube_config"    :  None,                       # or path to your kubeconfig file, e.g., "~/.kube/config"
-    "service_account": "default",                   # Kubernetes service account for Vault authentication
-    "namespace"      : "default",                   # Kubernetes namespace for service account
-    "vault_url"      : "https://192.168.86.9:8200",
-    "role"           : "demo",
-    "ca_cert"        : True                         # or path to CA cert file
-}
-
-if os.getenv("VAULT_URL"):
-    secretcfg["vault_url"] = os.getenv("VAULT_URL")
-else:
-    secretcfg["vault_url"] = "https://192.168.86.9:8200"
-
-secretdef = {
-    "read_type"  : "SECRET",
-    "secret_name": "matrix-secrets",
-    "namespace"  : "default",
-    "read_key"   : "secrets.json",
-    "transit_key": "aes256-key"
-}
+with open("secretdef.json") as f:
+    secretdef = json.loads(f.read())
 
 log_level        = logging.INFO
-validate         = True  # Set to True if you want to validate the secrets after re-encryption, otherwise False
-
+validate         = os.getenv("VALIDATE", "True").lower() in ("true", "1", "yes")  # Set to True if you want to validate the secrets after re-encryption, otherwise False
 
 logging.info("🔥 Recryptonator initializing… preparing for vault key rotation! 🔥")
 logging.debug("SecretManager initializing.")

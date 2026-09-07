@@ -145,9 +145,7 @@ def read_encrypted_secrets(manager: SecretManager, secret_def: dict) -> dict:
 
 
 # @register("KUBEVAULT", "CREATE")
-def create_encrypted_secret(
-    manager: SecretManager, secret_def: dict, data: str
-) -> dict:
+def create_encrypted_secret( manager: SecretManager, secret_def: dict, data: str) -> dict:
     """Creates or updates a Kubernetes secret with encrypted data."""
     transit_key = secret_def.get("transit_key")
     if not transit_key:

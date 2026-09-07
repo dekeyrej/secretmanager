@@ -27,32 +27,14 @@ except json.JSONDecodeError as e:
     logging.error(f"Invalid JSON input: {e}")
     sys.exit(1)
 
+with open("secretcfg.json") as f:
+    secretcfg = json.loads(f.read())
 
-secretcfg = {
-    "SOURCE"         : "KUBEVAULT",
-    "kube_config"    : None,                        # or path to your kubeconfig file, e.g., "~/.kube/config"
-    "service_account": "default",                   # Kubernetes service account for Vault authentication
-    "namespace"      : "default",                   # Kubernetes namespace for service account
-    "vault_url"      : "https://192.168.86.9:8200",
-    "role"           : "demo",
-    "ca_cert"        : True                         # True if certifi's PEM file has been patched
-}
-
-if os.getenv("VAULT_URL"):
-    secretcfg["vault_url"] = os.getenv("VAULT_URL")
-else:
-    secretcfg["vault_url"] = "https://192.168.86.9:8200"
-
-secretdef = {
-    "read_type"  : "SECRET",
-    "secret_name": "matrix-secrets",
-    "namespace"  : "default",
-    "read_key" : "secrets.json",
-    "transit_key": "aes256-key"
-}
+with open("secretdef.json") as f:
+    secretdef = json.loads(f.read())
 
 log_level        = logging.INFO
-validate         =  True
+validate         = os.getenv("VALIDATE", "True").lower() in ("true", "1", "yes")  
 
 sm = SecretManager(secretcfg, log_level)
 sm.execute(secretcfg.get("SOURCE"), "CREATE", sm, secretdef, secrettext)

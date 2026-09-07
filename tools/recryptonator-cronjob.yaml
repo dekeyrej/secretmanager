@@ -9,30 +9,36 @@ spec:
       template:
         spec:
           containers:
-          - name: vault-key-purge-9000
-            image: ghcr.io/dekeyrej/recryptonator-image:latest  # Replace with your container image
-            imagePullPolicy: Always
-            securityContext:
-              privileged: false
-            env:
-            - name: VAULT_URL
-              value: "https://192.168.86.9:8200"
-            - name: CA_CERT
-              value: "/code/ca.crt"
-            - name: ROLE
-              value: "demo"
-            - name: SERVICE_ACCOUNT
-              value: "default"
-            - name: TRANSIT_KEY
-              value: "aes256-key"
-            - name: NAMESPACE
-              value: "default"
-            - name: SECRET_NAME
-              value: "matrix-secrets"
-            - name: SECRET_DATA_NAME
-              value: "secrets.json"
-            - name: VALIDATE
-              value: "1"
+            - name: vault-key-purge-9000
+              image: ghcr.io/dekeyrej/recryptonator-image:latest  # Replace with your container image
+              imagePullPolicy: Always
+              securityContext:
+                privileged: false
+              env:
+                - name: VALIDATE
+                  value: "1"
+                - name: REQUESTS_CA_BUNDLE
+                  value: "/etc/ssl/certs/internal-ca.pem"
+              volumeMounts:
+                - name: secretcfg-volume
+                  mountPath: /code/secretcfg.json
+                  subPath: secretcfg.json
+                - name: secretdef-volume
+                  mountPath: /code/secretdef.json
+                  subPath: secretdef.json
+                - name: ca-volume
+                  mountPath: /etc/ssl/certs/internal-ca.pem
+                  subPath: ca.pem
           restartPolicy: OnFailure
+          volumes:
+            - name: secretcfg-volume
+              configMap:
+                name: secretcfg
+            - name: secretdef-volume
+              configMap:
+                name: secretdef
+            - name: ca-volume
+              configMap:
+                name: internal-ca-cert
           imagePullSecrets:
-          - name: ghcr-login-secret
+            - name: ghcr-login-secret

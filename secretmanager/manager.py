@@ -11,6 +11,9 @@ class SecretManager:
     SOURCES = {"FILE", "ENVIRONMENT", "KUBERNETES", "KUBEVAULT"}
 
     def __init__(self, config: dict = None, log_level=logging.INFO):
+        self.k8s_client = None
+        self.hvac_client = None
+        self.config = None
         logging.basicConfig(
             level=log_level, format="%(asctime)s - %(levelname)s - %(message)s"
         )
@@ -18,9 +21,6 @@ class SecretManager:
         from secretmanager.secretregistry import SECRET_VERB_REGISTRY
 
         self.registry = VerbRegistry(SECRET_VERB_REGISTRY)
-        self.k8s_client = None
-        self.hvac_client = None
-        self.config = None
         if not config:
             logger.info(
                 "No configuration provided. Call configure_secret_type with a valid secret_type."
